@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
-import Demo from '../components/Demo';
+import Hero from '../components/Hero';
+import InteractiveGuide from '../components/InteractiveGuide';
+import ToolsResources from '../components/ToolsResources';
 ---
 
 <html lang="en">
@@ -9,15 +11,24 @@ import Demo from '../components/Demo';
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro + React + Tailwind + shadcn</title>
+		<meta name="description" content="Comprehensive guide, tools, and resources for the Teenage Engineering EP-133 K.O. II sampler and sequencer" />
+		<title>EP-133 K.O. II - Interactive Guide & Resources</title>
 	</head>
-	<body>
-		<div class="container mx-auto p-8 space-y-8">
-			<div>
-				<h1 class="text-4xl font-bold mb-4">Astro + React + Tailwind + shadcn</h1>
-				<p class="text-muted-foreground mb-6">Your project is ready! 🚀</p>
+	<body class="antialiased">
+		<Hero client:load />
+		<InteractiveGuide client:load />
+		<ToolsResources client:load />
+		
+		<!-- Footer -->
+		<footer class="bg-slate-900 text-white py-12">
+			<div class="container mx-auto px-6 text-center">
+				<p class="text-slate-400 mb-4">
+					This is an unofficial community resource for the Teenage Engineering EP-133 K.O. II
+				</p>
+				<p class="text-sm text-slate-500">
+					© 2025 EP-133 Guide. Not affiliated with Teenage Engineering.
+				</p>
 			</div>
-			<Demo client:load />
-		</div>
+		</footer>
 	</body>
 </html>
