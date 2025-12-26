@@ -1,0 +1,265 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Button } from '../../components/ui/button';
+import { ListingCard } from '../../components/ListingCard';
+import { StatReadout } from '../../components/StatReadout';
+import { IconChevronLeft, IconChevronRight, getCategoryIcon } from '../../components/Icons';
+
+export function getStaticPaths() {
+  const categories = [
+    { slug: 'sample-packs' },
+    { slug: 'patches-presets' },
+    { slug: 'accessories' },
+    { slug: 'tutorials' },
+    { slug: 'communities' },
+    { slug: 'tools-software' },
+  ];
+
+  return categories.map(cat => ({
+    params: { slug: cat.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+
+// Mock data
+const categories: Record<string, any> = {
+  'sample-packs': {
+    id: '1',
+    name: 'Sample Packs',
+    slug: 'sample-packs',
+    icon: 'music',
+    description: 'Curated sample collections optimized for EP-133 memory and workflow. Find drum kits, melodic loops, textures, and more.',
+    order: 1,
+    count: 45,
+    createdAt: '',
+    updatedAt: '',
+  },
+  'patches-presets': {
+    id: '2',
+    name: 'Patches & Presets',
+    slug: 'patches-presets',
+    icon: 'sliders',
+    description: 'Sound configurations, effect chains, and preset bundles to expand your sonic palette.',
+    order: 2,
+    count: 28,
+    createdAt: '',
+    updatedAt: '',
+  },
+  'accessories': {
+    id: '3',
+    name: 'Accessories',
+    slug: 'accessories',
+    icon: 'package',
+    description: 'Cases, stands, cables, and hardware accessories for your EP-133 setup.',
+    order: 3,
+    count: 19,
+    createdAt: '',
+    updatedAt: '',
+  },
+  'tutorials': {
+    id: '4',
+    name: 'Tutorials',
+    slug: 'tutorials',
+    icon: 'play',
+    description: 'Video guides, written walkthroughs, and educational content to master your EP-133.',
+    order: 4,
+    count: 32,
+    createdAt: '',
+    updatedAt: '',
+  },
+  'communities': {
+    id: '5',
+    name: 'Communities',
+    slug: 'communities',
+    icon: 'users',
+    description: 'Forums, Discord servers, subreddits, and social groups for EP-133 enthusiasts.',
+    order: 5,
+    count: 12,
+    createdAt: '',
+    updatedAt: '',
+  },
+  'tools-software': {
+    id: '6',
+    name: 'Tools & Software',
+    slug: 'tools-software',
+    icon: 'wrench',
+    description: 'Desktop apps, utilities, and companion software for enhanced workflow.',
+    order: 6,
+    count: 20,
+    createdAt: '',
+    updatedAt: '',
+  },
+};
+
+const category = categories[slug || 'sample-packs'];
+const CategoryIcon = getCategoryIcon(category.icon);
+
+// Mock listings for this category
+const tags = [
+  { id: '1', name: 'Free', slug: 'free', color: '#22c55e', createdAt: '', updatedAt: '' },
+  { id: '2', name: 'Premium', slug: 'premium', color: '#f59e0b', createdAt: '', updatedAt: '' },
+  { id: '3', name: 'Community', slug: 'community', color: '#8b5cf6', createdAt: '', updatedAt: '' },
+];
+
+const listings = [
+  {
+    id: '1',
+    title: 'Lo-Fi Beats Sample Pack',
+    slug: 'lo-fi-beats-sample-pack',
+    shortDescription: 'Over 200 dusty, vinyl-textured samples perfect for chill beats.',
+    category: category,
+    tags: [tags[0], tags[2]],
+    isFeatured: true,
+    rating: 4.5,
+    status: 'published' as const,
+    createdAt: '',
+    updatedAt: '',
+    description: {},
+  },
+  {
+    id: '2',
+    title: 'Hip-Hop Drums Vol. 1',
+    slug: 'hip-hop-drums-vol-1',
+    shortDescription: 'Classic boom-bap and trap drum samples formatted for EP-133.',
+    category: category,
+    tags: [tags[1]],
+    isFeatured: false,
+    rating: 4.7,
+    status: 'published' as const,
+    createdAt: '',
+    updatedAt: '',
+    description: {},
+  },
+  {
+    id: '3',
+    title: 'Ambient Textures Collection',
+    slug: 'ambient-textures-collection',
+    shortDescription: 'Atmospheric pads, drones, and textural samples.',
+    category: category,
+    tags: [tags[0]],
+    isFeatured: false,
+    rating: 4.2,
+    status: 'published' as const,
+    createdAt: '',
+    updatedAt: '',
+    description: {},
+  },
+];
+
+const page = 1;
+const totalPages = Math.ceil(category.count / 12);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: category.name,
+  description: category.description,
+  url: import.meta.env.PUBLIC_SITE_URL + '/categories/' + slug,
+};
+---
+
+<BaseLayout
+  title={category.name}
+  description={category.description}
+  jsonLd={jsonLd}
+>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Breadcrumb -->
+    <nav class="mb-6">
+      <Button variant="ghost" size="sm" asChild>
+        <a href="/categories" class="flex items-center gap-1 text-[var(--muted-foreground)]">
+          <IconChevronLeft size={14} />
+          All Categories
+        </a>
+      </Button>
+    </nav>
+
+    <!-- Category header -->
+    <div class="panel p-6 mb-8">
+      <div class="flex flex-col md:flex-row md:items-center gap-6">
+        <!-- Icon -->
+        <div class="w-16 h-16 rounded-lg bg-[var(--control)] flex items-center justify-center">
+          <CategoryIcon size={32} />
+        </div>
+
+        <!-- Info -->
+        <div class="flex-1">
+          <h1 class="text-2xl md:text-3xl font-bold mb-2">{category.name}</h1>
+          <p class="text-[var(--muted-foreground)]">{category.description}</p>
+        </div>
+
+        <!-- Count -->
+        <div class="md:text-right">
+          <StatReadout value={category.count} label="Listings" accent />
+        </div>
+      </div>
+    </div>
+
+    <!-- Listings grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+      {listings.map((listing) => (
+        <ListingCard listing={listing} />
+      ))}
+    </div>
+
+    <!-- Empty state if no listings -->
+    {listings.length === 0 && (
+      <div class="panel p-12 text-center">
+        <CategoryIcon size={48} className="mx-auto text-[var(--muted-foreground)] mb-4" />
+        <h3 class="text-lg font-semibold mb-2">No listings yet</h3>
+        <p class="text-[var(--muted-foreground)] mb-4">
+          Be the first to add a resource to this category.
+        </p>
+        <Button variant="accent" asChild>
+          <a href="/submit">Submit a Listing</a>
+        </Button>
+      </div>
+    )}
+
+    <!-- Pagination -->
+    {totalPages > 1 && (
+      <div class="flex items-center justify-center gap-2">
+        <Button
+          variant="control"
+          size="icon"
+          disabled={page <= 1}
+          asChild={page > 1}
+        >
+          {page > 1 ? (
+            <a href={`?page=${page - 1}`}>
+              <IconChevronLeft size={16} />
+            </a>
+          ) : (
+            <span><IconChevronLeft size={16} /></span>
+          )}
+        </Button>
+
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+          <Button
+            variant={p === page ? 'accent' : 'control'}
+            size="icon"
+            asChild
+          >
+            <a href={`?page=${p}`}>{p}</a>
+          </Button>
+        ))}
+
+        <Button
+          variant="control"
+          size="icon"
+          disabled={page >= totalPages}
+          asChild={page < totalPages}
+        >
+          {page < totalPages ? (
+            <a href={`?page=${page + 1}`}>
+              <IconChevronRight size={16} />
+            </a>
+          ) : (
+            <span><IconChevronRight size={16} /></span>
+          )}
+        </Button>
+      </div>
+    )}
+  </div>
+</BaseLayout>

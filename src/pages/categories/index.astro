@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { CategoryCard } from '../../components/CategoryCard';
+import { StatsGrid } from '../../components/StatReadout';
+
+// Mock data - will be replaced with getCategoriesWithCounts()
+const categories = [
+  { id: '1', name: 'Sample Packs', slug: 'sample-packs', icon: 'music', description: 'Curated sample collections optimized for EP-133 memory and workflow.', order: 1, count: 45, createdAt: '', updatedAt: '' },
+  { id: '2', name: 'Patches & Presets', slug: 'patches-presets', icon: 'sliders', description: 'Sound configurations, effect chains, and preset bundles.', order: 2, count: 28, createdAt: '', updatedAt: '' },
+  { id: '3', name: 'Accessories', slug: 'accessories', icon: 'package', description: 'Cases, stands, cables, and hardware accessories for your setup.', order: 3, count: 19, createdAt: '', updatedAt: '' },
+  { id: '4', name: 'Tutorials', slug: 'tutorials', icon: 'play', description: 'Video guides, written walkthroughs, and educational content.', order: 4, count: 32, createdAt: '', updatedAt: '' },
+  { id: '5', name: 'Communities', slug: 'communities', icon: 'users', description: 'Forums, Discord servers, subreddits, and social groups.', order: 5, count: 12, createdAt: '', updatedAt: '' },
+  { id: '6', name: 'Tools & Software', slug: 'tools-software', icon: 'wrench', description: 'Desktop apps, utilities, and companion software.', order: 6, count: 20, createdAt: '', updatedAt: '' },
+];
+
+const totalListings = categories.reduce((sum, cat) => sum + (cat.count || 0), 0);
+
+const stats = [
+  { value: categories.length, label: 'Categories', accent: true },
+  { value: totalListings, label: 'Total Listings' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Categories',
+  description: 'Browse EP-133 directory by category',
+  url: import.meta.env.PUBLIC_SITE_URL + '/categories',
+};
+---
+
+<BaseLayout
+  title="Categories"
+  description="Browse EP-133 K.O. II resources organized by category - sample packs, tutorials, accessories, and more."
+  jsonLd={jsonLd}
+>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <span class="text-label text-[var(--muted-foreground)] block mb-1">Browse By</span>
+      <h1 class="text-section">Categories</h1>
+    </div>
+
+    <!-- Stats -->
+    <div class="mb-8">
+      <StatsGrid stats={stats} className="max-w-md" client:visible />
+    </div>
+
+    <!-- Categories grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {categories.map((category) => (
+        <CategoryCard category={category} className="h-full" />
+      ))}
+    </div>
+  </div>
+</BaseLayout>

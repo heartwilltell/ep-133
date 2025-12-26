@@ -1,0 +1,236 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { DirectoryFilters } from '../../components/DirectoryFilters';
+import { ListingCard, ListingCardSkeleton } from '../../components/ListingCard';
+import { Button } from '../../components/ui/button';
+import { IconChevronLeft, IconChevronRight } from '../../components/Icons';
+
+// Get query params
+const url = new URL(Astro.request.url);
+const searchQuery = url.searchParams.get('q') || '';
+const categoryFilter = url.searchParams.get('category') || '';
+const tagFilter = url.searchParams.get('tags') || '';
+const sortBy = url.searchParams.get('sort') || 'newest';
+const featured = url.searchParams.get('featured') === 'true';
+const page = parseInt(url.searchParams.get('page') || '1');
+
+// Mock data (will be replaced with Payload API calls)
+const categories = [
+  { id: '1', name: 'Sample Packs', slug: 'sample-packs', icon: 'music', description: '', order: 1, createdAt: '', updatedAt: '' },
+  { id: '2', name: 'Patches & Presets', slug: 'patches-presets', icon: 'sliders', description: '', order: 2, createdAt: '', updatedAt: '' },
+  { id: '3', name: 'Accessories', slug: 'accessories', icon: 'package', description: '', order: 3, createdAt: '', updatedAt: '' },
+  { id: '4', name: 'Tutorials', slug: 'tutorials', icon: 'play', description: '', order: 4, createdAt: '', updatedAt: '' },
+  { id: '5', name: 'Communities', slug: 'communities', icon: 'users', description: '', order: 5, createdAt: '', updatedAt: '' },
+  { id: '6', name: 'Tools & Software', slug: 'tools-software', icon: 'wrench', description: '', order: 6, createdAt: '', updatedAt: '' },
+];
+
+const tags = [
+  { id: '1', name: 'Free', slug: 'free', color: '#22c55e', createdAt: '', updatedAt: '' },
+  { id: '2', name: 'Premium', slug: 'premium', color: '#f59e0b', createdAt: '', updatedAt: '' },
+  { id: '3', name: 'Official', slug: 'official', color: '#3b82f6', createdAt: '', updatedAt: '' },
+  { id: '4', name: 'Community', slug: 'community', color: '#8b5cf6', createdAt: '', updatedAt: '' },
+  { id: '5', name: 'Beginner', slug: 'beginner', color: '#06b6d4', createdAt: '', updatedAt: '' },
+  { id: '6', name: 'Advanced', slug: 'advanced', color: '#ef4444', createdAt: '', updatedAt: '' },
+];
+
+const listings = [
+  {
+    id: '1',
+    title: 'Lo-Fi Beats Sample Pack',
+    slug: 'lo-fi-beats-sample-pack',
+    shortDescription: 'Over 200 dusty, vinyl-textured samples perfect for chill beats on the EP-133.',
+    category: categories[0],
+    tags: [tags[0], tags[3]],
+    isFeatured: true,
+    rating: 4.5,
+    status: 'published' as const,
+    createdAt: '',
+    updatedAt: '',
+    description: {},
+  },
+  {
+    id: '2',
+    title: 'EP-133 Masterclass',
+    slug: 'ep-133-masterclass',
+    shortDescription: 'Complete video course covering every feature of the EP-133 from basics to advanced.',
+    category: categories[3],
+    tags: [tags[1], tags[4]],
+    isFeatured: true,
+    rating: 5.0,
+    status: 'published' as const,
+    createdAt: '',
+    updatedAt: '',
+    description: {},
+  },
+  {
+    id: '3',
+    title: 'K.O. Community Discord',
+    slug: 'ko-community-discord',
+    shortDescription: 'Active Discord server with 5000+ EP-133 enthusiasts sharing tips and samples.',
+    category: categories[4],
+    tags: [tags[0], tags[3]],
+    isFeatured: true,
+    rating: 4.8,
+    status: 'published' as const,
+    createdAt: '',
+    updatedAt: '',
+    description: {},
+  },
+  {
+    id: '4',
+    title: 'Hardshell Carry Case',
+    slug: 'hardshell-carry-case',
+    shortDescription: 'Premium protective case designed specifically for the EP-133 dimensions.',
+    category: categories[2],
+    tags: [tags[1]],
+    isFeatured: false,
+    rating: 4.2,
+    location: { city: 'Los Angeles', country: 'USA' },
+    status: 'published' as const,
+    createdAt: '',
+    updatedAt: '',
+    description: {},
+  },
+  {
+    id: '5',
+    title: 'Pocket Operator Sync Tool',
+    slug: 'pocket-operator-sync-tool',
+    shortDescription: 'Desktop app for syncing EP-133 with other Teenage Engineering devices.',
+    category: categories[5],
+    tags: [tags[0], tags[2]],
+    isFeatured: false,
+    rating: 4.0,
+    status: 'published' as const,
+    createdAt: '',
+    updatedAt: '',
+    description: {},
+  },
+  {
+    id: '6',
+    title: 'Hip-Hop Drums Vol. 1',
+    slug: 'hip-hop-drums-vol-1',
+    shortDescription: 'Classic boom-bap and trap drum samples formatted for EP-133.',
+    category: categories[0],
+    tags: [tags[1]],
+    isFeatured: false,
+    rating: 4.7,
+    status: 'published' as const,
+    createdAt: '',
+    updatedAt: '',
+    description: {},
+  },
+];
+
+const totalPages = 3;
+const totalListings = listings.length * totalPages;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Directory Listings',
+  description: 'Browse all EP-133 K.O. II resources, tools, and community listings.',
+  url: Astro.url.href,
+};
+---
+
+<BaseLayout
+  title="Directory"
+  description="Browse all EP-133 K.O. II resources, tools, and community listings."
+  jsonLd={jsonLd}
+>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Page header -->
+    <div class="mb-8">
+      <span class="text-label text-[var(--muted-foreground)] block mb-1">Browse</span>
+      <div class="flex items-baseline gap-3">
+        <h1 class="text-section">Directory</h1>
+        <span class="font-mono text-sm text-[var(--muted-foreground)]">
+          {totalListings} listings
+        </span>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="mb-8">
+      <DirectoryFilters
+        client:load
+        categories={categories}
+        tags={tags}
+        initialFilters={{
+          search: searchQuery,
+          category: categoryFilter,
+          tags: tagFilter ? tagFilter.split(',') : [],
+          sort: sortBy,
+        }}
+        viewMode="grid"
+        onViewModeChange={() => {}}
+        onFiltersChange={() => {}}
+      />
+    </div>
+
+    <!-- Listings grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8" id="listings-grid">
+      {listings.map((listing) => (
+        <ListingCard listing={listing} />
+      ))}
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex items-center justify-center gap-2">
+      <Button
+        variant="control"
+        size="icon"
+        disabled={page <= 1}
+        asChild={page > 1}
+      >
+        {page > 1 ? (
+          <a href={`?page=${page - 1}`}>
+            <IconChevronLeft size={16} />
+          </a>
+        ) : (
+          <span><IconChevronLeft size={16} /></span>
+        )}
+      </Button>
+
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+        <Button
+          variant={p === page ? 'accent' : 'control'}
+          size="icon"
+          asChild
+        >
+          <a href={`?page=${p}`}>{p}</a>
+        </Button>
+      ))}
+
+      <Button
+        variant="control"
+        size="icon"
+        disabled={page >= totalPages}
+        asChild={page < totalPages}
+      >
+        {page < totalPages ? (
+          <a href={`?page=${page + 1}`}>
+            <IconChevronRight size={16} />
+          </a>
+        ) : (
+          <span><IconChevronRight size={16} /></span>
+        )}
+      </Button>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // Focus search on ?focus=search
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('focus') === 'search') {
+    const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
+    if (searchInput) {
+      searchInput.focus();
+      // Remove the focus param from URL
+      params.delete('focus');
+      const newUrl = params.toString() ? `?${params.toString()}` : window.location.pathname;
+      window.history.replaceState({}, '', newUrl);
+    }
+  }
+</script>

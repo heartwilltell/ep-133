@@ -1,0 +1,27 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "rules": {
+    "no-console": "warn",
+    "no-debugger": "error",
+    "no-unused-vars": "warn",
+    "eqeqeq": "error",
+    "no-var": "error",
+    "prefer-const": "warn"
+  },
+  "plugins": ["react", "typescript", "jsx-a11y"],
+  "ignorePatterns": [
+    "node_modules",
+    "dist",
+    ".astro",
+    "cms/node_modules",
+    "cms/.payload"
+  ],
+  "overrides": [
+    {
+      "files": ["*.astro"],
+      "rules": {
+        "no-unused-vars": "off"
+      }
+    }
+  ]
+}
