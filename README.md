@@ -8,6 +8,7 @@ A modern, fast, SEO-friendly directory website for EP-133 K.O. II resources, bui
 - **[React](https://react.dev)** - Interactive UI components
 - **[Tailwind CSS v4](https://tailwindcss.com)** - Utility-first styling
 - **[Payload CMS](https://payloadcms.com)** - Headless content management
+- **[PostgreSQL](https://www.postgresql.org/)** - Relational database
 - **[Bun](https://bun.sh)** - Fast JavaScript runtime & package manager
 - **[oxlint](https://oxc-project.github.io/docs/guide/usage/linter.html)** - Fast linter & formatter
 
@@ -58,7 +59,7 @@ ep-133/
 ### Prerequisites
 
 - [Bun](https://bun.sh) v1.0+
-- [MongoDB](https://www.mongodb.com/) (for Payload CMS)
+- [PostgreSQL](https://www.postgresql.org/) 14+
 
 ### Installation
 
@@ -90,7 +91,7 @@ PUBLIC_SITE_URL=http://localhost:4321
 
 **CMS `cms/.env`:**
 ```env
-DATABASE_URI=mongodb://localhost:27017/ep133-directory
+DATABASE_URI=postgresql://postgres:postgres@localhost:5432/ep133_directory
 PAYLOAD_SECRET=your-secret-key-change-this
 PAYLOAD_URL=http://localhost:3001
 PUBLIC_SITE_URL=http://localhost:4321
@@ -100,12 +101,18 @@ ADMIN_PASSWORD=changeme123
 
 ### Running Locally
 
-**Terminal 1 - Start MongoDB:**
+**Terminal 1 - Start PostgreSQL:**
 ```bash
 # Using Docker
-docker run -d -p 27017:27017 --name mongodb mongo:latest
+docker run -d \
+  --name postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=ep133_directory \
+  -p 5432:5432 \
+  postgres:16-alpine
 
-# Or use your local MongoDB installation
+# Or use your local PostgreSQL installation
+# createdb ep133_directory
 ```
 
 **Terminal 2 - Start Payload CMS:**
@@ -211,9 +218,10 @@ bun run build
 
 ### Payload CMS
 
-Deploy to any Node.js host:
+Deploy to any Node.js host with PostgreSQL:
 - Docker
 - Railway, Render, Fly.io
+- Vercel (with external PostgreSQL)
 - Self-hosted VPS
 
 ## Features

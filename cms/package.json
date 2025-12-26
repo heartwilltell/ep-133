@@ -11,7 +11,7 @@
     "seed": "bun run src/seed.ts"
   },
   "dependencies": {
-    "@payloadcms/db-mongodb": "^3.0.0",
+    "@payloadcms/db-postgres": "^3.0.0",
     "@payloadcms/next": "^3.0.0",
     "@payloadcms/richtext-lexical": "^3.0.0",
     "@payloadcms/storage-local": "^3.0.0",
