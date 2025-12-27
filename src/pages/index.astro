@@ -1,34 +1,210 @@
 ---
-import '../styles/global.css';
-import Hero from '../components/Hero';
-import InteractiveGuide from '../components/InteractiveGuide';
-import ToolsResources from '../components/ToolsResources';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
+import { Input } from '../components/ui/input';
+import { ListingCard } from '../components/ListingCard';
+import { CategoryCard } from '../components/CategoryCard';
+import { StatsGrid } from '../components/StatReadout';
+import { IconSearch, IconChevronRight } from '../components/Icons';
+
+// Mock data for development (will be replaced with Payload API calls)
+const stats = [
+  { value: 156, label: 'Listings', accent: true },
+  { value: 6, label: 'Categories' },
+  { value: 24, label: 'Featured' },
+  { value: '4.5', label: 'Avg Rating' },
+];
+
+const categories = [
+  { id: '1', name: 'Sample Packs', slug: 'sample-packs', icon: 'music', description: 'Curated sample collections for EP-133', order: 1, count: 45, createdAt: '', updatedAt: '' },
+  { id: '2', name: 'Patches & Presets', slug: 'patches-presets', icon: 'sliders', description: 'Sound configurations and presets', order: 2, count: 28, createdAt: '', updatedAt: '' },
+  { id: '3', name: 'Accessories', slug: 'accessories', icon: 'package', description: 'Cases, stands, and hardware accessories', order: 3, count: 19, createdAt: '', updatedAt: '' },
+  { id: '4', name: 'Tutorials', slug: 'tutorials', icon: 'play', description: 'Video guides and walkthroughs', order: 4, count: 32, createdAt: '', updatedAt: '' },
+  { id: '5', name: 'Communities', slug: 'communities', icon: 'users', description: 'Forums, Discord servers, and groups', order: 5, count: 12, createdAt: '', updatedAt: '' },
+  { id: '6', name: 'Tools & Software', slug: 'tools-software', icon: 'wrench', description: 'Software utilities and companion apps', order: 6, count: 20, createdAt: '', updatedAt: '' },
+];
+
+const featuredListings = [
+  {
+    id: '1',
+    title: 'Lo-Fi Beats Sample Pack',
+    slug: 'lo-fi-beats-sample-pack',
+    shortDescription: 'Over 200 dusty, vinyl-textured samples perfect for chill beats on the EP-133.',
+    category: categories[0],
+    tags: [{ id: '1', name: 'Free', slug: 'free', createdAt: '', updatedAt: '' }, { id: '2', name: 'Lo-Fi', slug: 'lo-fi', createdAt: '', updatedAt: '' }],
+    isFeatured: true,
+    rating: 4.5,
+    status: 'published' as const,
+    createdAt: '',
+    updatedAt: '',
+    description: {},
+  },
+  {
+    id: '2',
+    title: 'EP-133 Masterclass',
+    slug: 'ep-133-masterclass',
+    shortDescription: 'Complete video course covering every feature of the EP-133 from basics to advanced.',
+    category: categories[3],
+    tags: [{ id: '3', name: 'Premium', slug: 'premium', createdAt: '', updatedAt: '' }, { id: '4', name: 'Beginner', slug: 'beginner', createdAt: '', updatedAt: '' }],
+    isFeatured: true,
+    rating: 5.0,
+    status: 'published' as const,
+    createdAt: '',
+    updatedAt: '',
+    description: {},
+  },
+  {
+    id: '3',
+    title: 'K.O. Community Discord',
+    slug: 'ko-community-discord',
+    shortDescription: 'Active Discord server with 5000+ EP-133 enthusiasts sharing tips and samples.',
+    category: categories[4],
+    tags: [{ id: '1', name: 'Free', slug: 'free', createdAt: '', updatedAt: '' }, { id: '5', name: 'Community', slug: 'community', createdAt: '', updatedAt: '' }],
+    isFeatured: true,
+    rating: 4.8,
+    status: 'published' as const,
+    createdAt: '',
+    updatedAt: '',
+    description: {},
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'EP-133 Directory',
+  description: 'Discover resources, tools, and communities for the Teenage Engineering EP-133 K.O. II sampler.',
+  url: import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321',
+};
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content="Comprehensive guide, tools, and resources for the Teenage Engineering EP-133 K.O. II sampler and sequencer" />
-		<title>EP-133 K.O. II - Interactive Guide & Resources</title>
-	</head>
-	<body class="antialiased">
-		<Hero client:load />
-		<InteractiveGuide client:load />
-		<ToolsResources client:load />
-		
-		<!-- Footer -->
-		<footer class="bg-slate-900 text-white py-12">
-			<div class="container mx-auto px-6 text-center">
-				<p class="text-slate-400 mb-4">
-					This is an unofficial community resource for the Teenage Engineering EP-133 K.O. II
-				</p>
-				<p class="text-sm text-slate-500">
-					© 2025 EP-133 Guide. Not affiliated with Teenage Engineering.
-				</p>
-			</div>
-		</footer>
-	</body>
-</html>
+<BaseLayout title="Home" jsonLd={jsonLd}>
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden border-b border-[var(--border)]">
+    <!-- Background pattern -->
+    <div class="absolute inset-0 opacity-[0.02]" style="background-image: url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\");"></div>
+
+    <div class="container mx-auto px-4 py-16 md:py-24 relative">
+      <div class="max-w-3xl mx-auto text-center">
+        <!-- Tag line -->
+        <div class="inline-flex items-center gap-2 mb-6">
+          <span class="w-8 h-8 bg-[var(--accent)] text-white rounded flex items-center justify-center text-xs font-mono font-bold">
+            EP
+          </span>
+          <Badge variant="outline">Community Directory</Badge>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+          Everything for your
+          <span class="block text-[var(--accent)]">K.O. II</span>
+        </h1>
+
+        <!-- Subheadline -->
+        <p class="text-lg md:text-xl text-[var(--muted-foreground)] mb-8 max-w-xl mx-auto">
+          Discover sample packs, tutorials, tools, and communities for the Teenage Engineering EP-133.
+        </p>
+
+        <!-- Search Bar -->
+        <div class="max-w-lg mx-auto mb-8">
+          <form action="/listings" method="get" class="flex gap-2">
+            <Input
+              type="search"
+              name="q"
+              placeholder="Search listings..."
+              icon={<IconSearch size={16} />}
+              class="flex-1"
+            />
+            <Button type="submit" variant="accent">
+              Search
+            </Button>
+          </form>
+        </div>
+
+        <!-- Quick links -->
+        <div class="flex flex-wrap justify-center gap-2">
+          <Button variant="ghost" size="sm" asChild>
+            <a href="/listings">Browse All</a>
+          </Button>
+          <Button variant="ghost" size="sm" asChild>
+            <a href="/categories">Categories</a>
+          </Button>
+          <Button variant="ghost" size="sm" asChild>
+            <a href="/listings?featured=true">Featured</a>
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="border-b border-[var(--border)] bg-[var(--panel)]">
+    <div class="container mx-auto px-4 py-8">
+      <StatsGrid stats={stats} client:visible />
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="py-16 border-b border-[var(--border)]">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <span class="text-label text-[var(--muted-foreground)] block mb-1">Browse By</span>
+          <h2 class="text-section">Categories</h2>
+        </div>
+        <Button variant="ghost" size="sm" asChild>
+          <a href="/categories" class="flex items-center gap-1">
+            View All
+            <IconChevronRight size={14} />
+          </a>
+        </Button>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        {categories.map((category) => (
+          <CategoryCard category={category} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Listings Section -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <span class="text-label text-[var(--muted-foreground)] block mb-1">Curated</span>
+          <h2 class="text-section">Featured Listings</h2>
+        </div>
+        <Button variant="ghost" size="sm" asChild>
+          <a href="/listings?featured=true" class="flex items-center gap-1">
+            View All
+            <IconChevronRight size={14} />
+          </a>
+        </Button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {featuredListings.map((listing) => (
+          <ListingCard listing={listing} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="border-t border-[var(--border)] bg-[var(--panel)]">
+    <div class="container mx-auto px-4 py-16">
+      <div class="max-w-2xl mx-auto text-center">
+        <h2 class="text-section mb-4">Have a resource to share?</h2>
+        <p class="text-[var(--muted-foreground)] mb-6">
+          Submit your EP-133 samples, tutorials, or tools to help the community grow.
+        </p>
+        <Button variant="accent" size="lg" asChild>
+          <a href="/submit">Submit a Listing</a>
+        </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

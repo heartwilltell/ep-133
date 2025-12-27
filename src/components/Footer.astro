@@ -1,0 +1,90 @@
+---
+const currentYear = new Date().getFullYear();
+
+const footerLinks = [
+  {
+    title: 'Browse',
+    links: [
+      { href: '/listings', label: 'All Listings' },
+      { href: '/categories', label: 'Categories' },
+      { href: '/listings?featured=true', label: 'Featured' },
+    ]
+  },
+  {
+    title: 'Resources',
+    links: [
+      { href: 'https://teenage.engineering/products/ep-133', label: 'Official Product', external: true },
+      { href: 'https://teenage.engineering/guides/ep-133', label: 'Official Manual', external: true },
+    ]
+  }
+];
+---
+
+<footer class="border-t border-[var(--border)] bg-[var(--panel)]">
+  <div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <!-- Brand -->
+      <div class="col-span-2 md:col-span-1">
+        <a href="/" class="flex items-center gap-2 text-lg font-bold mb-4">
+          <span class="inline-flex items-center justify-center w-8 h-8 bg-[var(--accent)] text-white rounded text-xs font-mono font-bold">
+            EP
+          </span>
+          <span>133 Directory</span>
+        </a>
+        <p class="text-sm text-[var(--muted-foreground)] max-w-xs">
+          Community-curated resources for the Teenage Engineering EP-133 K.O. II sampler and sequencer.
+        </p>
+      </div>
+
+      <!-- Link Columns -->
+      {footerLinks.map(section => (
+        <div>
+          <h3 class="text-label text-[var(--muted-foreground)] mb-3">{section.title}</h3>
+          <ul class="space-y-2">
+            {section.links.map(link => (
+              <li>
+                <a
+                  href={link.href}
+                  class="text-sm text-[var(--foreground)] hover:text-[var(--accent)] transition-colors inline-flex items-center gap-1"
+                  target={link.external ? '_blank' : undefined}
+                  rel={link.external ? 'noopener noreferrer' : undefined}
+                >
+                  {link.label}
+                  {link.external && (
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  )}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
+      <!-- Stats Panel -->
+      <div class="panel p-4">
+        <h3 class="text-label text-[var(--muted-foreground)] mb-3">System Status</h3>
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="status-dot active"></span>
+            <span class="text-xs text-[var(--muted-foreground)]">All systems operational</span>
+          </div>
+          <div class="text-xs text-[var(--muted-foreground)] font-mono">
+            v0.1.0
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="mt-12 pt-6 border-t border-[var(--border)] flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-xs text-[var(--muted-foreground)]">
+        &copy; {currentYear} EP-133 Directory. Not affiliated with Teenage Engineering.
+      </p>
+      <p class="text-xs text-[var(--muted-foreground)]">
+        Built with Astro, React & Payload CMS
+      </p>
+    </div>
+  </div>
+</footer>

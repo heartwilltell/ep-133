@@ -1,0 +1,356 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { ListingCard } from '../../components/ListingCard';
+import {
+  IconChevronLeft,
+  IconExternalLink,
+  IconGlobe,
+  IconMail,
+  IconMapPin,
+  IconStar,
+  IconTag,
+  getCategoryIcon,
+} from '../../components/Icons';
+import type { Listing, Category, Tag } from '../../lib/api';
+
+export function getStaticPaths() {
+  // Mock data - will be replaced with Payload API call
+  const listings = [
+    { slug: 'lo-fi-beats-sample-pack' },
+    { slug: 'ep-133-masterclass' },
+    { slug: 'ko-community-discord' },
+    { slug: 'hardshell-carry-case' },
+    { slug: 'pocket-operator-sync-tool' },
+    { slug: 'hip-hop-drums-vol-1' },
+  ];
+
+  return listings.map(listing => ({
+    params: { slug: listing.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+
+// Mock data - will be replaced with getListingBySlug(slug)
+const categories = [
+  { id: '1', name: 'Sample Packs', slug: 'sample-packs', icon: 'music', description: '', order: 1, createdAt: '', updatedAt: '' },
+  { id: '2', name: 'Patches & Presets', slug: 'patches-presets', icon: 'sliders', description: '', order: 2, createdAt: '', updatedAt: '' },
+  { id: '3', name: 'Accessories', slug: 'accessories', icon: 'package', description: '', order: 3, createdAt: '', updatedAt: '' },
+  { id: '4', name: 'Tutorials', slug: 'tutorials', icon: 'play', description: '', order: 4, createdAt: '', updatedAt: '' },
+  { id: '5', name: 'Communities', slug: 'communities', icon: 'users', description: '', order: 5, createdAt: '', updatedAt: '' },
+  { id: '6', name: 'Tools & Software', slug: 'tools-software', icon: 'wrench', description: '', order: 6, createdAt: '', updatedAt: '' },
+];
+
+const tags = [
+  { id: '1', name: 'Free', slug: 'free', color: '#22c55e', createdAt: '', updatedAt: '' },
+  { id: '2', name: 'Premium', slug: 'premium', color: '#f59e0b', createdAt: '', updatedAt: '' },
+  { id: '3', name: 'Official', slug: 'official', color: '#3b82f6', createdAt: '', updatedAt: '' },
+  { id: '4', name: 'Community', slug: 'community', color: '#8b5cf6', createdAt: '', updatedAt: '' },
+  { id: '5', name: 'Beginner', slug: 'beginner', color: '#06b6d4', createdAt: '', updatedAt: '' },
+];
+
+const allListings: Record<string, any> = {
+  'lo-fi-beats-sample-pack': {
+    id: '1',
+    title: 'Lo-Fi Beats Sample Pack',
+    slug: 'lo-fi-beats-sample-pack',
+    shortDescription: 'Over 200 dusty, vinyl-textured samples perfect for chill beats on the EP-133.',
+    description: `<p>A comprehensive collection of lo-fi samples meticulously crafted for the EP-133 K.O. II. This pack includes over 200 individual samples covering everything you need to create authentic lo-fi hip-hop beats.</p>
+<h3>What's Included</h3>
+<ul>
+<li>50+ Drum one-shots (kicks, snares, hi-hats, percussion)</li>
+<li>40+ Melodic loops (keys, guitars, synths)</li>
+<li>30+ Bass samples and loops</li>
+<li>25+ Vinyl textures and noise</li>
+<li>20+ Vocal chops and samples</li>
+<li>35+ FX and transitions</li>
+</ul>
+<h3>Format</h3>
+<p>All samples are provided in 16-bit 44.1kHz WAV format, optimized for the EP-133's sample memory. Each sample has been carefully trimmed and normalized for immediate use.</p>`,
+    category: categories[0],
+    tags: [tags[0], tags[3]],
+    websiteUrl: 'https://example.com/lofi-pack',
+    contactEmail: 'samples@example.com',
+    isFeatured: true,
+    rating: 4.5,
+    location: null,
+    socialLinks: {
+      twitter: 'https://twitter.com/example',
+      instagram: 'https://instagram.com/example',
+    },
+    status: 'published',
+    createdAt: '2024-01-15',
+    updatedAt: '2024-01-20',
+  },
+  'ep-133-masterclass': {
+    id: '2',
+    title: 'EP-133 Masterclass',
+    slug: 'ep-133-masterclass',
+    shortDescription: 'Complete video course covering every feature of the EP-133 from basics to advanced.',
+    description: `<p>Master your EP-133 K.O. II with this comprehensive video course. Whether you're just unboxing your device or looking to unlock advanced techniques, this masterclass has you covered.</p>
+<h3>Course Contents</h3>
+<ul>
+<li>Module 1: Getting Started (45 min)</li>
+<li>Module 2: Sampling Techniques (60 min)</li>
+<li>Module 3: Sequencing Deep Dive (75 min)</li>
+<li>Module 4: Effects & Sound Design (50 min)</li>
+<li>Module 5: Live Performance Tips (40 min)</li>
+<li>Module 6: Advanced Workflows (55 min)</li>
+</ul>
+<p>Total runtime: 5+ hours of HD video content with downloadable project files and sample packs.</p>`,
+    category: categories[3],
+    tags: [tags[1], tags[4]],
+    websiteUrl: 'https://example.com/masterclass',
+    contactEmail: 'courses@example.com',
+    isFeatured: true,
+    rating: 5.0,
+    status: 'published',
+    createdAt: '2024-02-01',
+    updatedAt: '2024-02-10',
+  },
+};
+
+// Get listing data
+const listing = allListings[slug || ''] || allListings['lo-fi-beats-sample-pack'];
+const category = listing.category as Category;
+const listingTags = listing.tags as Tag[];
+const CategoryIcon = getCategoryIcon(category?.icon);
+
+// Related listings
+const relatedListings = Object.values(allListings)
+  .filter((l: any) => l.slug !== slug)
+  .slice(0, 3)
+  .map((l: any) => ({
+    ...l,
+    description: {},
+  }));
+
+// JSON-LD
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: listing.title,
+  description: listing.shortDescription,
+  url: Astro.url.href,
+  ...(listing.rating && {
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: listing.rating,
+      bestRating: 5,
+    },
+  }),
+};
+---
+
+<BaseLayout
+  title={listing.title}
+  description={listing.shortDescription || listing.title}
+  jsonLd={jsonLd}
+>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Breadcrumb -->
+    <nav class="mb-6">
+      <Button variant="ghost" size="sm" asChild>
+        <a href="/listings" class="flex items-center gap-1 text-[var(--muted-foreground)]">
+          <IconChevronLeft size={14} />
+          Back to Directory
+        </a>
+      </Button>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Main content -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Header panel -->
+        <div class="panel p-6">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <div class="flex items-center gap-2">
+              <CategoryIcon size={16} className="text-[var(--muted-foreground)]" />
+              <a href={`/categories/${category?.slug}`} class="text-label text-[var(--muted-foreground)] hover:text-[var(--accent)]">
+                {category?.name}
+              </a>
+            </div>
+            {listing.isFeatured && (
+              <Badge variant="featured">Featured</Badge>
+            )}
+          </div>
+
+          <h1 class="text-2xl md:text-3xl font-bold mb-3">{listing.title}</h1>
+
+          {listing.shortDescription && (
+            <p class="text-lg text-[var(--muted-foreground)] mb-4">
+              {listing.shortDescription}
+            </p>
+          )}
+
+          <!-- Tags -->
+          {listingTags.length > 0 && (
+            <div class="flex flex-wrap gap-2 mb-4">
+              {listingTags.map((tag: Tag) => (
+                <a href={`/listings?tags=${tag.slug}`}>
+                  <Badge variant="outline" class="hover:border-[var(--accent)]">
+                    {tag.name}
+                  </Badge>
+                </a>
+              ))}
+            </div>
+          )}
+
+          <!-- Meta info -->
+          <div class="flex flex-wrap gap-4 text-sm text-[var(--muted-foreground)] pt-4 border-t border-[var(--border)]">
+            {listing.rating && (
+              <div class="flex items-center gap-1">
+                <IconStar size={14} class="text-[var(--accent)] fill-[var(--accent)]" />
+                <span class="font-mono">{listing.rating.toFixed(1)}</span>
+              </div>
+            )}
+            {listing.location?.city && (
+              <div class="flex items-center gap-1">
+                <IconMapPin size={14} />
+                <span>{listing.location.city}, {listing.location.country}</span>
+              </div>
+            )}
+            <div class="text-xs">
+              Updated {new Date(listing.updatedAt).toLocaleDateString()}
+            </div>
+          </div>
+        </div>
+
+        <!-- Description panel -->
+        <div class="panel p-6">
+          <h2 class="text-label text-[var(--muted-foreground)] mb-4">Description</h2>
+          <div
+            class="prose prose-sm max-w-none
+              prose-headings:font-semibold prose-headings:text-[var(--foreground)]
+              prose-p:text-[var(--foreground)]
+              prose-li:text-[var(--foreground)]
+              prose-a:text-[var(--accent)] prose-a:no-underline hover:prose-a:underline"
+            set:html={listing.description}
+          />
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="space-y-4">
+        <!-- Actions panel -->
+        <div class="panel p-4 space-y-3">
+          <h3 class="text-label text-[var(--muted-foreground)] mb-2">Actions</h3>
+
+          {listing.websiteUrl && (
+            <Button variant="accent" class="w-full justify-between" asChild>
+              <a href={listing.websiteUrl} target="_blank" rel="noopener noreferrer">
+                Visit Website
+                <IconExternalLink size={14} />
+              </a>
+            </Button>
+          )}
+
+          {listing.contactEmail && (
+            <Button variant="outline" class="w-full justify-between" asChild>
+              <a href={`mailto:${listing.contactEmail}`}>
+                Contact
+                <IconMail size={14} />
+              </a>
+            </Button>
+          )}
+        </div>
+
+        <!-- Details panel -->
+        <div class="panel p-4">
+          <h3 class="text-label text-[var(--muted-foreground)] mb-3">Details</h3>
+          <dl class="space-y-3 text-sm">
+            <div class="flex justify-between">
+              <dt class="text-[var(--muted-foreground)]">Category</dt>
+              <dd>
+                <a href={`/categories/${category?.slug}`} class="flex items-center gap-1 hover:text-[var(--accent)]">
+                  <CategoryIcon size={12} />
+                  {category?.name}
+                </a>
+              </dd>
+            </div>
+
+            {listing.rating && (
+              <div class="flex justify-between">
+                <dt class="text-[var(--muted-foreground)]">Rating</dt>
+                <dd class="flex items-center gap-1">
+                  <IconStar size={12} class="text-[var(--accent)] fill-[var(--accent)]" />
+                  <span class="font-mono">{listing.rating.toFixed(1)} / 5.0</span>
+                </dd>
+              </div>
+            )}
+
+            {listing.location?.city && (
+              <div class="flex justify-between">
+                <dt class="text-[var(--muted-foreground)]">Location</dt>
+                <dd class="flex items-center gap-1">
+                  <IconMapPin size={12} />
+                  {listing.location.city}
+                </dd>
+              </div>
+            )}
+
+            <div class="flex justify-between">
+              <dt class="text-[var(--muted-foreground)]">Added</dt>
+              <dd class="font-mono text-xs">{new Date(listing.createdAt).toLocaleDateString()}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Social links -->
+        {listing.socialLinks && Object.values(listing.socialLinks).some(Boolean) && (
+          <div class="panel p-4">
+            <h3 class="text-label text-[var(--muted-foreground)] mb-3">Social</h3>
+            <div class="flex gap-2">
+              {listing.socialLinks.twitter && (
+                <Button variant="control" size="icon-sm" asChild>
+                  <a href={listing.socialLinks.twitter} target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                  </a>
+                </Button>
+              )}
+              {listing.socialLinks.instagram && (
+                <Button variant="control" size="icon-sm" asChild>
+                  <a href={listing.socialLinks.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                    </svg>
+                  </a>
+                </Button>
+              )}
+              {listing.socialLinks.youtube && (
+                <Button variant="control" size="icon-sm" asChild>
+                  <a href={listing.socialLinks.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                    </svg>
+                  </a>
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+
+    <!-- Related listings -->
+    {relatedListings.length > 0 && (
+      <section class="mt-16 pt-8 border-t border-[var(--border)]">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-section">You might also like</h2>
+          <Button variant="ghost" size="sm" asChild>
+            <a href="/listings">View All</a>
+          </Button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {relatedListings.map((related: any) => (
+            <ListingCard listing={related} />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</BaseLayout>

@@ -1,0 +1,18 @@
+---
+// SEO component for consistent meta tag handling
+// Used within BaseLayout but can also be used standalone
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  canonicalUrl?: string;
+  type?: 'website' | 'article';
+}
+
+const { title, description, image, canonicalUrl, type = 'website' } = Astro.props;
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321';
+---
+
+<!-- This component is intentionally empty as meta tags are in BaseLayout -->
+<!-- It serves as a type definition and can be extended for specific page SEO -->
