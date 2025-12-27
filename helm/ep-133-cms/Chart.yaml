@@ -1,0 +1,13 @@
+apiVersion: v2
+name: ep-133-cms
+description: Helm chart for EP-133 Payload CMS backend
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - payload
+  - cms
+  - nextjs
+  - ep-133
+maintainers:
+  - name: EP-133 Team
