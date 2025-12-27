@@ -1,0 +1,29 @@
+name = "ep-133-frontend"
+main = "worker.js"
+compatibility_date = "2025-12-27"
+compatibility_flags = ["nodejs_compat"]
+
+# Enable static asset serving
+[site]
+bucket = "./dist"
+
+# Environment variables
+[vars]
+PAYLOAD_URL = "https://cms.ep-133.example.com"
+
+# Production environment
+[env.production]
+name = "ep-133-frontend"
+routes = [
+  { pattern = "ep-133.example.com", custom_domain = true }
+]
+
+[env.production.vars]
+PAYLOAD_URL = "https://cms.ep-133.example.com"
+
+# Staging environment
+[env.staging]
+name = "ep-133-frontend-staging"
+
+[env.staging.vars]
+PAYLOAD_URL = "https://cms-staging.ep-133.example.com"

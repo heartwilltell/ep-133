@@ -1,0 +1,127 @@
+# Default values for ep-133-cms
+replicaCount: 2
+
+image:
+  repository: ghcr.io/your-org/ep-133-cms
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 1001
+  runAsNonRoot: true
+  runAsUser: 1001
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: false
+
+service:
+  type: ClusterIP
+  port: 3001
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+  hosts:
+    - host: cms.ep-133.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: ep-133-cms-tls
+      hosts:
+        - cms.ep-133.example.com
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteMany
+  size: 10Gi
+  mountPath: /app/media
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - ep-133-cms
+          topologyKey: kubernetes.io/hostname
+
+env:
+  # Database connection
+  DATABASE_URI: ""
+
+  # Payload configuration
+  PAYLOAD_SECRET: ""
+  PAYLOAD_URL: "https://cms.ep-133.example.com"
+  PUBLIC_SITE_URL: "https://ep-133.example.com"
+
+  # Admin credentials (use secrets in production)
+  ADMIN_EMAIL: ""
+  ADMIN_PASSWORD: ""
+
+  # Node environment
+  NODE_ENV: "production"
+  PORT: "3001"
+
+# PostgreSQL dependency (optional - use if you want bundled PostgreSQL)
+postgresql:
+  enabled: false
+  auth:
+    username: payload
+    password: ""
+    database: ep133
+  primary:
+    persistence:
+      enabled: true
+      size: 20Gi
+
+# External PostgreSQL configuration
+externalPostgresql:
+  enabled: true
+  host: "postgresql.default.svc.cluster.local"
+  port: 5432
+  database: "ep133"
+  username: "payload"
+  password: ""
