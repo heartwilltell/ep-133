@@ -1,0 +1,39 @@
+name: Generate Bun Lockfile
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'claude/update-lockfile-*'
+
+jobs:
+  generate-lockfile:
+    name: Generate and Commit Lockfile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Generate root lockfile
+        run: bun install
+
+      - name: Generate CMS lockfile
+        run: cd cms && bun install
+
+      - name: Commit lockfiles
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add bun.lockb cms/bun.lockb
+          git diff --staged --quiet || git commit -m "chore: Generate bun lockfiles"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
