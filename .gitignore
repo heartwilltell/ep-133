@@ -36,3 +36,6 @@ cms/media/
 
 # Bun
 bun.lockb
+
+# npm (we use bun instead)
+package-lock.json
