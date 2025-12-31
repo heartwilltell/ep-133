@@ -3,7 +3,6 @@ import { fileURLToPath } from 'url'
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { localStoragePlugin } from '@payloadcms/storage-local'
 
 import { Users } from './collections/Users'
 import { Categories } from './collections/Categories'
@@ -32,15 +31,6 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || 'postgresql://localhost:5432/ep133_directory',
     },
   }),
-  plugins: [
-    localStoragePlugin({
-      collections: {
-        media: {
-          prefix: 'media',
-        },
-      },
-    }),
-  ],
   cors: [
     'http://localhost:4321',
     'http://localhost:3000',
