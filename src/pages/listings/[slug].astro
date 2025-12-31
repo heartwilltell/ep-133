@@ -190,7 +190,7 @@ const jsonLd = {
             <div class="flex flex-wrap gap-2 mb-4">
               {listingTags.map((tag: Tag) => (
                 <a href={`/listings?tags=${tag.slug}`}>
-                  <Badge variant="outline" class="hover:border-[var(--accent)]">
+                  <Badge variant="outline" className="hover:border-[var(--accent)]">
                     {tag.name}
                   </Badge>
                 </a>
@@ -202,7 +202,7 @@ const jsonLd = {
           <div class="flex flex-wrap gap-4 text-sm text-[var(--muted-foreground)] pt-4 border-t border-[var(--border)]">
             {listing.rating && (
               <div class="flex items-center gap-1">
-                <IconStar size={14} class="text-[var(--accent)] fill-[var(--accent)]" />
+                <IconStar size={14} className="text-[var(--accent)] fill-[var(--accent)]" />
                 <span class="font-mono">{listing.rating.toFixed(1)}</span>
               </div>
             )}
@@ -239,7 +239,7 @@ const jsonLd = {
           <h3 class="text-label text-[var(--muted-foreground)] mb-2">Actions</h3>
 
           {listing.websiteUrl && (
-            <Button variant="accent" class="w-full justify-between" asChild>
+            <Button variant="accent" className="w-full justify-between" asChild>
               <a href={listing.websiteUrl} target="_blank" rel="noopener noreferrer">
                 Visit Website
                 <IconExternalLink size={14} />
@@ -248,7 +248,7 @@ const jsonLd = {
           )}
 
           {listing.contactEmail && (
-            <Button variant="outline" class="w-full justify-between" asChild>
+            <Button variant="outline" className="w-full justify-between" asChild>
               <a href={`mailto:${listing.contactEmail}`}>
                 Contact
                 <IconMail size={14} />
@@ -275,7 +275,7 @@ const jsonLd = {
               <div class="flex justify-between">
                 <dt class="text-[var(--muted-foreground)]">Rating</dt>
                 <dd class="flex items-center gap-1">
-                  <IconStar size={12} class="text-[var(--accent)] fill-[var(--accent)]" />
+                  <IconStar size={12} className="text-[var(--accent)] fill-[var(--accent)]" />
                   <span class="font-mono">{listing.rating.toFixed(1)} / 5.0</span>
                 </dd>
               </div>

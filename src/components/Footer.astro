@@ -1,7 +1,10 @@
 ---
 const currentYear = new Date().getFullYear();
 
-const footerLinks = [
+const footerLinks: Array<{
+  title: string;
+  links: Array<{ href: string; label: string; external?: boolean }>;
+}> = [
   {
     title: 'Browse',
     links: [
