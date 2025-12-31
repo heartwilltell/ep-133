@@ -12,7 +12,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "lint": "oxlint --fix",
-    "format": "oxlint --fix --format",
+    "format": "oxlint --fix",
     "check": "astro check",
     "seed": "cd cms && bun run seed"
   },
