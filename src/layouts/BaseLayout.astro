@@ -57,7 +57,7 @@ const fullTitle = title === 'Home' ? 'EP-133 Directory' : `${title} | EP-133 Dir
 
     <!-- JSON-LD Structured Data -->
     {jsonLd && (
-      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
     )}
 
     <!-- Fonts -->
