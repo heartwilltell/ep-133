@@ -18,7 +18,7 @@ const serverFunctions: ServerFunctionClient = async function (args) {
   'use server'
   return handleServerFunctions({
     ...args,
-    configPromise,
+    config: configPromise,
     importMap,
   })
 }

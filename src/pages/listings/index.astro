@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { DirectoryFilters } from '../../components/DirectoryFilters';
-import { ListingCard, ListingCardSkeleton } from '../../components/ListingCard';
+import { ListingCard } from '../../components/ListingCard';
 import { Button } from '../../components/ui/button';
 import { IconChevronLeft, IconChevronRight } from '../../components/Icons';
 
@@ -11,7 +11,6 @@ const searchQuery = url.searchParams.get('q') || '';
 const categoryFilter = url.searchParams.get('category') || '';
 const tagFilter = url.searchParams.get('tags') || '';
 const sortBy = url.searchParams.get('sort') || 'newest';
-const featured = url.searchParams.get('featured') === 'true';
 const page = parseInt(url.searchParams.get('page') || '1');
 
 // Mock data (will be replaced with Payload API calls)
