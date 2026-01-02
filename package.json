@@ -7,6 +7,7 @@
     "dev": "astro dev",
     "dev:cms": "cd cms && bun run dev",
     "dev:all": "bun run dev & bun run dev:cms",
+    "dev:worker": "wrangler dev",
     "build": "astro build",
     "build:cms": "cd cms && bun run build",
     "preview": "astro preview",
@@ -14,7 +15,11 @@
     "lint": "oxlint --fix",
     "format": "oxlint --fix",
     "check": "astro check",
-    "seed": "cd cms && bun run seed"
+    "seed": "cd cms && bun run seed",
+    "deploy": "bun run build && wrangler deploy --env production",
+    "deploy:staging": "bun run build && wrangler deploy --env staging",
+    "deploy:dev": "bun run build && wrangler deploy --env development",
+    "wrangler": "wrangler"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.0",

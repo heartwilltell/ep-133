@@ -10,6 +10,28 @@ bucket = "./dist"
 # Environment variables
 [vars]
 PAYLOAD_URL = "https://cms.ep-133.example.com"
+ENVIRONMENT = "development"
+
+# Observability
+[observability]
+enabled = true
+
+# Development environment
+[env.development]
+name = "ep-133-frontend-dev"
+workers_dev = true
+
+[env.development.vars]
+PAYLOAD_URL = "http://localhost:3001"
+ENVIRONMENT = "development"
+
+# Staging environment
+[env.staging]
+name = "ep-133-frontend-staging"
+
+[env.staging.vars]
+PAYLOAD_URL = "https://cms-staging.ep-133.example.com"
+ENVIRONMENT = "staging"
 
 # Production environment
 [env.production]
@@ -20,10 +42,4 @@ routes = [
 
 [env.production.vars]
 PAYLOAD_URL = "https://cms.ep-133.example.com"
-
-# Staging environment
-[env.staging]
-name = "ep-133-frontend-staging"
-
-[env.staging.vars]
-PAYLOAD_URL = "https://cms-staging.ep-133.example.com"
+ENVIRONMENT = "production"
