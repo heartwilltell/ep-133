@@ -48,10 +48,10 @@ const seed = async () => {
         collection: 'categories',
         data: cat,
       })
-      categoryMap[cat.slug] = created.id
+      categoryMap[cat.slug] = created.id as number
       console.log(`Created category: ${cat.name}`)
     } else {
-      categoryMap[cat.slug] = existing.docs[0].id
+      categoryMap[cat.slug] = existing.docs[0].id as number
     }
   }
 
@@ -81,10 +81,10 @@ const seed = async () => {
         collection: 'tags',
         data: tag,
       })
-      tagMap[tag.slug] = created.id
+      tagMap[tag.slug] = created.id as number
       console.log(`Created tag: ${tag.name}`)
     } else {
-      tagMap[tag.slug] = existing.docs[0].id
+      tagMap[tag.slug] = existing.docs[0].id as number
     }
   }
 
