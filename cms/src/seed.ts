@@ -98,14 +98,14 @@ const seed = async () => {
         root: {
           type: 'root',
           direction: null,
-          format: '',
+          format: '' as const,
           indent: 0,
           version: 1,
           children: [
             {
               type: 'paragraph',
               direction: null,
-              format: '',
+              format: '' as const,
               indent: 0,
               version: 1,
               children: [{ type: 'text', text: 'A comprehensive collection of lo-fi samples optimized for the EP-133 K.O. II. Includes one-shots, loops, and textures.' }],
@@ -129,14 +129,14 @@ const seed = async () => {
         root: {
           type: 'root',
           direction: null,
-          format: '',
+          format: '' as const,
           indent: 0,
           version: 1,
           children: [
             {
               type: 'paragraph',
               direction: null,
-              format: '',
+              format: '' as const,
               indent: 0,
               version: 1,
               children: [{ type: 'text', text: 'Learn everything about your EP-133 with this in-depth video masterclass. Perfect for beginners and intermediate users.' }],
@@ -159,14 +159,14 @@ const seed = async () => {
         root: {
           type: 'root',
           direction: null,
-          format: '',
+          format: '' as const,
           indent: 0,
           version: 1,
           children: [
             {
               type: 'paragraph',
               direction: null,
-              format: '',
+              format: '' as const,
               indent: 0,
               version: 1,
               children: [{ type: 'text', text: 'Join the largest community of EP-133 users. Share your creations, get feedback, and learn from fellow beat makers.' }],
@@ -189,14 +189,14 @@ const seed = async () => {
         root: {
           type: 'root',
           direction: null,
-          format: '',
+          format: '' as const,
           indent: 0,
           version: 1,
           children: [
             {
               type: 'paragraph',
               direction: null,
-              format: '',
+              format: '' as const,
               indent: 0,
               version: 1,
               children: [{ type: 'text', text: 'Keep your EP-133 safe with this custom-fitted hardshell case. Features foam padding and accessory pockets.' }],
@@ -219,14 +219,14 @@ const seed = async () => {
         root: {
           type: 'root',
           direction: null,
-          format: '',
+          format: '' as const,
           indent: 0,
           version: 1,
           children: [
             {
               type: 'paragraph',
               direction: null,
-              format: '',
+              format: '' as const,
               indent: 0,
               version: 1,
               children: [{ type: 'text', text: 'Seamlessly sync your EP-133 with Pocket Operators and other TE devices using this free utility.' }],
@@ -248,14 +248,14 @@ const seed = async () => {
         root: {
           type: 'root',
           direction: null,
-          format: '',
+          format: '' as const,
           indent: 0,
           version: 1,
           children: [
             {
               type: 'paragraph',
               direction: null,
-              format: '',
+              format: '' as const,
               indent: 0,
               version: 1,
               children: [{ type: 'text', text: '150+ drum one-shots and loops in the hip-hop style. Pre-chopped and ready to load onto your EP-133.' }],
