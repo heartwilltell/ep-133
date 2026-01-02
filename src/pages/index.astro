@@ -6,7 +6,7 @@ import { Input } from '../components/ui/input';
 import { ListingCard } from '../components/ListingCard';
 import { CategoryCard } from '../components/CategoryCard';
 import { StatsGrid } from '../components/StatReadout';
-import { IconSearch, IconChevronRight } from '../components/Icons';
+import { IconChevronRight } from '../components/Icons';
 
 // Mock data for development (will be replaced with Payload API calls)
 const stats = [
@@ -113,7 +113,6 @@ const jsonLd = {
               type="search"
               name="q"
               placeholder="Search listings..."
-              icon={<IconSearch size={16} />}
               className="flex-1"
             />
             <Button type="submit" variant="accent">
