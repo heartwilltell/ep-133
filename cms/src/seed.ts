@@ -35,7 +35,7 @@ const seed = async () => {
     { name: 'Tools & Software', slug: 'tools-software', icon: 'wrench', order: 6, description: 'Software utilities and companion apps' },
   ]
 
-  const categoryMap: Record<string, string | number> = {}
+  const categoryMap: Record<string, number> = {}
 
   for (const cat of categories) {
     const existing = await payload.find({
@@ -68,7 +68,7 @@ const seed = async () => {
     { name: 'Electronic', slug: 'electronic', color: '#14b8a6' },
   ]
 
-  const tagMap: Record<string, string | number> = {}
+  const tagMap: Record<string, number> = {}
 
   for (const tag of tags) {
     const existing = await payload.find({
