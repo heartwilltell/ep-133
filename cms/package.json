@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "payload dev",
-    "build": "payload build",
+    "build": "next build",
     "start": "payload serve",
     "generate:types": "payload generate:types",
     "seed": "bun run src/seed.ts"
