@@ -118,7 +118,7 @@ const seed = async () => {
       websiteUrl: 'https://example.com/lofi-pack',
       contactEmail: 'samples@example.com',
       isFeatured: true,
-      status: 'published',
+      status: 'published' as const,
       rating: 4.5,
     },
     {
@@ -148,7 +148,7 @@ const seed = async () => {
       tags: [tagMap['premium'], tagMap['beginner']],
       websiteUrl: 'https://example.com/masterclass',
       isFeatured: true,
-      status: 'published',
+      status: 'published' as const,
       rating: 5,
     },
     {
@@ -178,7 +178,7 @@ const seed = async () => {
       tags: [tagMap['free'], tagMap['community']],
       websiteUrl: 'https://discord.gg/example',
       isFeatured: true,
-      status: 'published',
+      status: 'published' as const,
       rating: 4.8,
     },
     {
@@ -208,7 +208,7 @@ const seed = async () => {
       tags: [tagMap['premium']],
       websiteUrl: 'https://example.com/case',
       location: { city: 'Los Angeles', country: 'USA' },
-      status: 'published',
+      status: 'published' as const,
       rating: 4.2,
     },
     {
@@ -237,7 +237,7 @@ const seed = async () => {
       category: categoryMap['tools-software'],
       tags: [tagMap['free'], tagMap['official']],
       websiteUrl: 'https://example.com/sync-tool',
-      status: 'published',
+      status: 'published' as const,
       rating: 4.0,
     },
     {
@@ -266,7 +266,7 @@ const seed = async () => {
       category: categoryMap['sample-packs'],
       tags: [tagMap['premium'], tagMap['hip-hop']],
       websiteUrl: 'https://example.com/hiphop-drums',
-      status: 'published',
+      status: 'published' as const,
       rating: 4.7,
     },
   ]
